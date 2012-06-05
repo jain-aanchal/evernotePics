@@ -1,0 +1,8 @@
+(1) Allows the user to OAuth to the Evernote service (http://dev.evernote.com/documentation/cloud/chapters/Authentication.php)
+
+(2) Displays a list of images in the evernote account (by searching for all notes with images: "resource:image/*") and iterating through all the resources in all the notes. You should support multiple requests to findNotes (http://dev.evernote.com/documentation/cloud/chapters/Searching_notes.php) to avoid requesting a very large data set.
+(2.1) Only display images with a size between 256x265 and 1024x1024. Use meta data information in Resource object to determine the image size.
+(2.2) Display a list of images scaled (using HTML) to a 256x256 bounding box maintaining the original image aspect ratio by generate the dynamic HTML content using JSP or JavaScript. You do not need to scale the images yourself (unless you want to), you may re-write the HTML tags to resize them.
+
+(3) When a user clicks on the image, display the image in full size using a lightbox.
+
