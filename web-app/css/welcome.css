@@ -1,0 +1,28 @@
+/**
+ * Welcome Page
+ **/
+
+.content {
+    padding: 20px;
+}
+.images-list {
+    list-style: none;
+    overflow: hidden;
+    zoom: 1;
+}
+
+.images-list li {
+    border: 1px solid #333;
+    float: left;
+    margin: 10px;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    cursor: pointer;
+
+}
+
+.images-list li:last-child {
+    margin-right: 0;
+}
+
