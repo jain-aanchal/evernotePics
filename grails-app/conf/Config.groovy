@@ -51,25 +51,25 @@ grails.spring.bean.packages = []
 // request parameters to mask when logging exceptions
 grails.exceptionresolver.params.exclude = ['password']
 
-grails.app.context="/"
+grails.app.context="/${appName}-${appVersion}"
 grails.companyName ="ABC"
 //evernote properties
 evernote.consumer.key= "jain_aanchal-3570"
 evernote.consumer.secret=  "71a06e5673db0519"
 evernote.host.url= "sandbox.evernote.com"
 
-evernote.useragent= grails.companyName + " " + ${appName} + "/" + ${version}
+evernote.useragent= grails.companyName + " " + ${appName} + "/" + ${appVersion}
 
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {
-        grails.serverURL = "http://www.changeme.com"
+        grails.serverURL = "http://localhost:8080/${appName}-${appVersion}"
     }
     development {
-        grails.serverURL = "http://Aanchal-Jains-iMac.local:8080"
+        grails.serverURL = "http://localhost:8080/${appName}-${appVersion}"
     }
     test {
-        grails.serverURL = "http://Aanchal-Jains-iMac.local:8080"
+        grails.serverURL = "http://localhost:8080"
     }
 
 }

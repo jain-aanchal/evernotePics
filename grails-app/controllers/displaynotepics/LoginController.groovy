@@ -47,31 +47,33 @@ class LoginController {
 
     def index() { }
 
+    //Check if we have the access token and the notebookUrl
+    def detectAuth(){
+        String actionFlow = "authenticate"
+        if (session.getAttribute(KEY_ACCESS_TOKEN) != null && session.getAttribute(NOTESTORE_URL) != null){
+            actionFlow =  "getUrls"
+        }
+        redirect(action: actionFlow)
+    }
 
-
+    //Authenticates the user
     def authenticate() {
-        //if (session.getAttribute(KEY_ACCESS_TOKEN != null && session.getAttribute(NOTESTORE_URL) != null){
-
-        //}
 
         cleanSession()
-
 
         Token requestToken = service.getRequestToken();
         session.setAttribute(KEY_REQUEST_TOKEN, requestToken.getToken());
         session.setAttribute(KEY_REQUEST_TOKEN_SECRET, requestToken.getSecret());
 
-        println("AJ Get Request Session " + session.getAttribute(KEY_REQUEST_TOKEN))
-
         def authUrl = service.getAuthorizationUrl(requestToken)
 
         redirect(url: authUrl)
     }
-
+    //Get the Access Token and NoteSoreUrl
     def accessToken() {
-        println("In Accesss Token ")
+
         Token requestToken = new Token(session.getAttribute(KEY_REQUEST_TOKEN), session.getAttribute(KEY_REQUEST_TOKEN_SECRET))
-        println("RequestToken " + requestToken.getToken())
+
 
         Verifier requestVerifier = new Verifier(params.oauth_verifier);
         AccessTokenExtractor.EvernoteAuthToken token =
@@ -81,34 +83,33 @@ class LoginController {
         def userId = token.userId
 
         session.setAttribute(KEY_ACCESS_TOKEN, accessToken);
-
         session.setAttribute(NOTESTORE_URL, noteStoreUrl);
         session.setAttribute(USER_ID, userId);
 
-        println("AJ Verifier: " + requestVerifier.getValue())
-        println("AJ AccessToken: " + accessToken)
-        println("AJ UserId: " + userId)
-        println("AJ....noteStoreUrl " + noteStoreUrl)
-
-        List<String> urls = getImageUrl(0, 5)
-
-
-        redirect(action: "welcome" ,params: [url: urls])
+        redirect(action: 'getUrls')
 
     }
 
+    //get the Image Urls
+    def getUrls(){
+        List<String> urls = getImageUrl(0, 5)
 
+        redirect(action: "welcome" ,params: [url: urls])
+    }
 
+    //View for the welcome page which displays the user images
     def welcome() {
 
     }
 
+    //Clean the default session first
     private cleanSession() {
         session.removeAttribute(KEY_REQUEST_TOKEN)
         session.removeAttribute(KEY_REQUEST_TOKEN_SECRET)
         session.removeAttribute(KEY_ACCESS_TOKEN)
     }
 
+    //Get the NoteStore Client
     private NoteStore.Client getNoteStoreClient() {
 
         String noteStoreUrl = session.getAttribute(NOTESTORE_URL);
@@ -120,20 +121,10 @@ class LoginController {
         return noteStore
     }
 
-    private List<Notebook> getNoteBooks() {
-        NoteStore.Client noteStore = getNoteStoreClient()
-        String authToken = session.getAttribute(KEY_ACCESS_TOKEN);
-
-        List<Notebook> notebooks = noteStore.listNotebooks(authToken);
-        return notebooks
-
-    }
-
+   //Get Notes Metadata based on the start Index and Offset
     private NotesMetadataList getNote(int startIndex, int pageSize) {
         String authToken = session.getAttribute(KEY_ACCESS_TOKEN);
-        //int pageSize = 10 ;
-        println("GetNote Size " + startIndex)
-        println("get Note pageSize " + pageSize)
+
         NoteFilter filter = new NoteFilter();
         filter.setOrder(NoteSortOrder.UPDATED.getValue());
 
@@ -148,6 +139,7 @@ class LoginController {
 
     }
 
+    //Get List of images to be displayed
     public List<String> getImageUrl(int startIndex, int offset) {
 
 
@@ -159,8 +151,6 @@ class LoginController {
 
         int maxNotes = notes.getTotalNotes();
 
-        println("Max notes " + maxNotes)
-        // println("Notes THIS page " + notesThisPage)
 
         NoteStore.Client noteStore = getNoteStoreClient()
 
@@ -168,8 +158,6 @@ class LoginController {
 
         while (notes != null && startIndex <= maxNotes) {
 
-            int notesThisPage = notes.getNotes().size();
-            println("AJ...notes this page " + notesThisPage)
 
             for (NoteMetadata note : notes.getNotes()) {
 
@@ -177,8 +165,7 @@ class LoginController {
                 Note n = noteStore.getNote(session.getAttribute(KEY_ACCESS_TOKEN), note.getGuid(), false, true, false, false)
 
                 if (n.resources != null) {
-                    println("AJ....n " + n.resources.toString())
-                    println("Finding the resource ")
+
 
                     List<Resource> resource = n.resources
 
@@ -188,34 +175,21 @@ class LoginController {
                         String mimeType = res.getMime()
                         if (mimeType.startsWith("image/") && (res.width >= 256 && res.width <= 1024) && (res.height >= 256 && res.height <= 1024)) {
 
-                            println("AJ.. image found ")
-
                             String imageType = mimeType.substring(6, mimeType.length())
-
-                            println("image type " + imageType)
 
                             InputStream ins = new ByteArrayInputStream(res.getData().body)
 
                             BufferedImage bImageFromConvert = ImageIO.read(ins)
                             String fileName = "web-app/images/save" + i + "." + imageType
 
-                            println("Filename " + fileName)
-                            String fileN = "/images/save" + i + "." + imageType
+                            String fileN = "save" + i + "." + imageType
                             i++;
 
                             File outputfile = new File(fileName)
 
-                            println("AJ...outputFile " + fileN)
-                            try {
-                                println("ImageType " + imageType)
+                            ImageIO.write(bImageFromConvert, imageType, outputfile)
 
-                                ImageIO.write(bImageFromConvert, imageType, outputfile)
-                            }
-                            catch (Exception e) {
-                                e.printStackTrace()
-                            }
-                            String image =   fileN
-                            imageUrl.add(image)
+                            imageUrl.add(fileN)
 
                         }  //if
                     } //for

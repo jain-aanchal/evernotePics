@@ -9,15 +9,17 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <title></title>
+    <title>Display Note Pictures</title>
+    <meta name="layout" content="main">
+    <link rel="stylesheet" href="${resource(dir:'css',file:'main.css')}" />
 </head>
 <body>
-Evernote Display Pic
-<g:form action="authenticate">
 
-    <input type="submit" value="Login"/>
+<g:form action="detectAuth">
+<div>
+    Evernote Display Pic
+</div>
+<input type="submit" value="Login"/>
 </g:form>
-
-
 </body>
 </html>
