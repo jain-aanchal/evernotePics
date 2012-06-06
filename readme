@@ -1,3 +1,5 @@
+--Project DisplayNotePics--
+
 (1) Allows the user to OAuth to the Evernote service (http://dev.evernote.com/documentation/cloud/chapters/Authentication.php)
 
 (2) Displays a list of images in the evernote account (by searching for all notes with images: "resource:image/*") and iterating through all the resources in all the notes. You should support multiple requests to findNotes (http://dev.evernote.com/documentation/cloud/chapters/Searching_notes.php) to avoid requesting a very large data set.
@@ -6,3 +8,32 @@
 
 (3) When a user clicks on the image, display the image in full size using a lightbox.
 
+--Deployment & Installation--
+
+I have tested the application by deploying the war in tomcat, and works like a charm ! 
+
+Steps on Mac:
+
+1. Incase you are not using tomcat, simply download tomcat from: http://tomcat.apache.org/download-60.cgi  (Refer: http://www.editrocket.com/articles/tomcat_mac.html)
+
+2. Edit startup.sh and add the following lines after the line starts with EXECUATBLE:
+
+export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/1.5/Home
+export CATALINA_HOME=/Users/<user-name>/tomcat
+
+3. Copy the downloaded war from https://github.com/jain-aanchal/evernotePics/tree/master/target under /tomcat/webapps
+
+4. Verify by loading http://localhost:8080/
+
+5. start tomcat: $> sh startup.sh
+
+Running the application (After tomcat is up and running):
+
+1. Open http://localhost:8080/DisplayNotePics-1.0/ and click Login
+
+In case you are planning to deploy on any other web server please change the following configs in the config file https://github.com/jain-aanchal/evernotePics/blob/master/grails-app/conf/Config.groovy
+
+1.Location of the prod server "grails.serverURL" 
+2.Location of the webapp directory "tomcat.webapps.path" 
+3.Evernote host url "evernote.host.url"
+4.Context Root "grails.app.context"
