@@ -52,7 +52,7 @@ grails.spring.bean.packages = []
 grails.exceptionresolver.params.exclude = ['password']
 
 grails.app.context="/${appName}-${appVersion}"
-//grails.app.context="/"
+
 grails.companyName ="ABC"
 //evernote properties
 evernote.consumer.key= "jain_aanchal-3570"
@@ -61,19 +61,19 @@ evernote.host.url= "sandbox.evernote.com"
 
 evernote.useragent= grails.companyName + " " + ${appName} + "/" + ${appVersion}
 
+tomcat.webapps.path="../webapps/DisplayNotePics-1.0/images"
+
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {
         grails.serverURL = "http://localhost:8080/${appName}-${appVersion}"
-        //grails.serverURL = "http://displaynotepics.cloudfoundry.com"
     }
     development {
         grails.serverURL = "http://localhost:8080/${appName}-${appVersion}"
-        //grails.serverURL = "http://displaynotepics.cloudfoundry.com"
     }
     test {
         grails.serverURL = "http://localhost:8080"
-        //grails.serverURL = "http://displaynotepics.cloudfoundry.com"
+
     }
 
 }
