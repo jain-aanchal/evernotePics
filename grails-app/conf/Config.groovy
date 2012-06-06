@@ -52,6 +52,7 @@ grails.spring.bean.packages = []
 grails.exceptionresolver.params.exclude = ['password']
 
 grails.app.context="/${appName}-${appVersion}"
+//grails.app.context="/"
 grails.companyName ="ABC"
 //evernote properties
 evernote.consumer.key= "jain_aanchal-3570"
@@ -64,12 +65,15 @@ evernote.useragent= grails.companyName + " " + ${appName} + "/" + ${appVersion}
 environments {
     production {
         grails.serverURL = "http://localhost:8080/${appName}-${appVersion}"
+        //grails.serverURL = "http://displaynotepics.cloudfoundry.com"
     }
     development {
         grails.serverURL = "http://localhost:8080/${appName}-${appVersion}"
+        //grails.serverURL = "http://displaynotepics.cloudfoundry.com"
     }
     test {
         grails.serverURL = "http://localhost:8080"
+        //grails.serverURL = "http://displaynotepics.cloudfoundry.com"
     }
 
 }
