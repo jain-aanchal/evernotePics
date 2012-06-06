@@ -21,6 +21,7 @@ import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
 import java.io.InputStream
+import javax.servlet.ServletContext
 
 class LoginController {
 
@@ -177,17 +178,25 @@ class LoginController {
 
                             String imageType = mimeType.substring(6, mimeType.length())
 
-                            InputStream ins = new ByteArrayInputStream(res.getData().body)
+                           // InputStream ins = new ByteArrayInputStream(res.getData().body)
 
-                            BufferedImage bImageFromConvert = ImageIO.read(ins)
-                            String fileName = "web-app/images/save" + i + "." + imageType
+                            //BufferedImage bImageFromConvert = ImageIO.read(ins)
+                           // String fileName = "web-app/images/save" + i + "." + imageType
+
+                            String fileName = "../webapps/DisplayNotePics-1.0/images/save" + i + "." + imageType
+
+
+                            //String fileName = g.resource(dir: 'images' ) + "/save" + i + "." + imageType
 
                             String fileN = "save" + i + "." + imageType
                             i++;
 
                             File outputfile = new File(fileName)
 
-                            ImageIO.write(bImageFromConvert, imageType, outputfile)
+
+                            outputfile.bytes =  res.getData().body
+
+                            //ImageIO.write(bImageFromConvert, imageType, outputfile)
 
                             imageUrl.add(fileN)
 
